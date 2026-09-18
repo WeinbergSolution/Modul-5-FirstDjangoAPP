@@ -28,3 +28,12 @@ def single_gadget_slug_view(request,gadget_slug):
     if gadget_match:
         return JsonResponse(gadget_match)
     raise Http404()
+
+def single_gadget_post_view(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            print(f"recieved data: {data}")
+            return JsonResponse({"response": "perfekt :)"})
+        except:
+            return JsonResponse({"response": "Das war wohl nix"})
