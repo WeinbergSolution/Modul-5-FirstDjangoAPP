@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from .dummy_data import gadgets
 import json
 
@@ -9,4 +9,4 @@ def start_page_view(request):
     return HttpResponse("hey das funktioniert ja :)!")
 
 def single_gadget_view(request):
-    return HttpResponse(json.dumps(gadgets[0]), content_type="application/json")
+    return HttpResponse(json.dumps(gadgets[0]))
