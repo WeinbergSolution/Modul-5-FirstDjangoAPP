@@ -9,4 +9,4 @@ def start_page_view(request):
     return HttpResponse("hey das funktioniert ja :)!")
 
 def single_gadget_view(request):
-    return HttpResponse({"test": True})
+     return HttpResponse(json.dumps(gadgets[0]))
