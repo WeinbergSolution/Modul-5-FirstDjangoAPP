@@ -1,5 +1,5 @@
 from django.shortcuts import redirect
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, HttpResponseNotFound, Http404
 from .dummy_data import gadgets
 import json
 from django.utils.text import slugify
@@ -11,16 +11,20 @@ def start_page_view(request):
     return HttpResponse("hey das funktioniert ja :)!")
 
 def single_gadget_view(request, gadget_id):
-    new_slug = slugify(gadgets[gadget_id]["name"])
-    new_url = reverse("gadget_slug_url", args=[new_slug])
+    if len(gadgets) > gadget_id:
+        new_slug = slugify(gadgets[gadget_id]["name"])
+        new_url = reverse("gadget_slug_url", args=[new_slug])
 
-    return redirect(new_url)
+        return redirect(new_url)
+    return HttpResponseNotFound("not found in list")
     
 def single_gadget_slug_view(request,gadget_slug):
-    gadget_match = {"result": "nothing"}
+    gadget_match = None
 
     for gadget in gadgets:
         if slugify(gadget["name"]) == gadget_slug:
             gadget_match = gadget
 
-    return JsonResponse(gadget_match)
+    if gadget_match:
+        return JsonResponse(gadget_match)
+    raise Http404()
