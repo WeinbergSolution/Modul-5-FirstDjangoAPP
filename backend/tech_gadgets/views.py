@@ -33,7 +33,7 @@ def single_gadget_post_view(request):
     if request.method == "POST":
         try:
             data = json.loads(request.body)
-            print(f"recieved data: {data}")
+            print(f"recieved data: {data["test"]}")
             return JsonResponse({"response": "perfekt :)"})
         except:
             return JsonResponse({"response": "Das war wohl nix"})
