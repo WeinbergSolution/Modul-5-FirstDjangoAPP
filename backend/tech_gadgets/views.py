@@ -7,12 +7,25 @@ import json
 
 from django.views import View
 
+from django.views.generic.base import RedirectView
+
 
 # Create your views here.
 
 def start_page_view(request):
     return HttpResponse("hey das funktioniert ja :)!")
 
+
+class RedirectToGadgetView(RedirectView):
+
+    pattern_name = "gadget_slug_url"
+
+    def get_redirect_url(self, *args, **kwargs):
+        slug = slugify(gadgets[kwargs.get("gadget_id", 0)]["name"])
+
+        new_kwargs = {"gadget_slug": slug}
+
+        return super().get_redirect_url(*args, **new_kwargs)
 
 def single_gadget_int_view(request, gadget_id):
 
@@ -55,32 +68,33 @@ class GadgetView(View):
 
 
          
+#   Wird ab Sektion 3 Video 2 nicht merh benötigt
+#   wurde durch class GadgetView(View): ersetzt.
+
+# def single_gadget_view(request, gadget_slug=""):
+
+#     if request.method == "GET":
+#         gadget_match = None
+
+#         for gadget in gadgets:
+#             if slugify(gadget["name"]) == gadget_slug:
+#                 gadget_match = gadget
+
+#         # WICHTIG: außerhalb der for-Schleife
+#         if gadget_match:
+#             return JsonResponse(gadget_match)
+
+#         # WICHTIG: ebenfalls außerhalb der for-Schleife
+#         raise Http404()
 
 
-def single_gadget_view(request, gadget_slug=""):
+#     if request.method == "POST":
+#         try:
+#             data = json.loads(request.body)
 
-    if request.method == "GET":
-        gadget_match = None
+#             print(f"received data: {data['test']}")
 
-        for gadget in gadgets:
-            if slugify(gadget["name"]) == gadget_slug:
-                gadget_match = gadget
+#             return JsonResponse({"response": "perfekt :)"})
 
-        # WICHTIG: außerhalb der for-Schleife
-        if gadget_match:
-            return JsonResponse(gadget_match)
-
-        # WICHTIG: ebenfalls außerhalb der for-Schleife
-        raise Http404()
-
-
-    if request.method == "POST":
-        try:
-            data = json.loads(request.body)
-
-            print(f"received data: {data['test']}")
-
-            return JsonResponse({"response": "perfekt :)"})
-
-        except:
-            return JsonResponse({"response": "Das war wohl nix"})
+#         except:
+#             return JsonResponse({"response": "Das war wohl nix"})
