@@ -8,5 +8,6 @@ import json
 def start_page_view(request):
     return HttpResponse("hey das funktioniert ja :)!")
 
-def single_gadget_view(request):
-     return HttpResponse(json.dumps(gadgets[0]))
+def single_gadget_view(request,gadget_id):
+    #return JsonResponse(gadgets[gadget_id]["name"])
+     return JsonResponse(gadgets[gadget_id])
