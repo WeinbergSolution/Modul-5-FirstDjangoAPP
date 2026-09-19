@@ -184,21 +184,31 @@
 
 
 
+
 # ------------   06 - JsonResponse -------------- #
-
-#   Django hat für den content.type eine interne bessere variante als den 
-#   content-type extra mit zugeben, über einen import JsonResponse, welches aus
-#   django.http kommt.
-
-#   tech_gedgets views.py
-#   Schrit 1. Improt from django.http um JsonResponse erweitern
-
+#
+#   Django hat für JSON-Antworten eine interne bessere Variante,
+#   als den content-type bei HttpResponse extra mitzugeben.
+#   Dafür gibt es JsonResponse aus django.http.
+#
+#   tech_gadgets views.py
+#
+#   Schritt 1. Import aus django.http um JsonResponse erweitern:
+#
 #       from django.http import HttpResponse, JsonResponse
-
-#   Schrit 2. HttpResponse anpassen, zu JsonResponse  content-type raus nehm. 
-#             denn dieser wird jetzt automatisch mitgegeben.
-
-#       return JsonResponse(json.dumps(gadgets[0]))
+#
+#   Schritt 2. HttpResponse zu JsonResponse ändern.
+#              Der content-type "application/json" wird automatisch gesetzt.
+#
+#       return JsonResponse(gadgets[0])
+#
+#   Wichtig:
+#   Bei JsonResponse brauchen wir json.dumps() nicht mehr.
+#   JsonResponse übernimmt die Umwandlung des Python-Dictionarys
+#   in JSON selbst.
+#
+#       ❌ JsonResponse(json.dumps(gadgets[0]))
+#       ✅ JsonResponse(gadgets[0])
 
 
 
@@ -212,28 +222,43 @@
 
 
 
-# ----------------- 08 - URL-Parameter ----------------------- # 
-
-# Woe kommen wir auf ein spezifisches Object aus tech_gadget ?
-
-# tech_gadget urls.py
-#   Schrit 1. im Path von gadget/ in der tech_gadget urls.py, egänzen wir den
-#              Path um <int:gadget_id>. mit int: geben wir direkt den Type mit,
-#              damit es nicht zu einem Type Error kommt
-
-#               path('gadget/<int:gadget_id>', single_gadget_view )
-#                         (dies wird ergäntzt)
-
-# tech_gadget views.py
-#   Schrit 2. In der tech_gadget views.py wird in der Fuction single_gadget_view
-#             zu dem Response Parameter ein weiterer übergeben "gadget_id"
-
-#               def single_gadget_view(request,gadget_id):
-#                   return HttpResponse(json.dumps(gadgets[0]))
-
-# tech_gadget views.py
-#   Schrit 3. Nun müssen wir den Parameter im JsonResponse anpassen
-
+# ----------------- 08 - URL-Parameter ----------------------- #
+#
+# Wie kommen wir auf ein spezifisches Object aus tech_gadgets?
+#
+# tech_gadgets urls.py
+#   Schritt 1. Im Path von gadget/ in der tech_gadgets urls.py ergänzen wir den
+#              Path um <int:gadget_id>. Mit int: geben wir direkt den Typ mit.
+#              Django akzeptiert an dieser Stelle dadurch nur Integer-Werte und
+#              übergibt gadget_id als int an unsere View.
+#
+#               path('gadget/<int:gadget_id>', single_gadget_view)
+#                            (dies wird ergänzt)
+#
+# tech_gadgets views.py
+#   Schritt 2. In der tech_gadgets views.py wird der Function single_gadget_view
+#              neben request ein weiterer Parameter "gadget_id" übergeben.
+#
+#               def single_gadget_view(request, gadget_id):
+#
+#   Schritt 3. Nun können wir den Parameter gadget_id verwenden, um das
+#              entsprechende Gadget aus der Liste abzurufen.
+#
+#               return JsonResponse(gadgets[gadget_id])
+#
+#   Beispiel:
+#
+#       /tech_gadgets/gadget/0
+#                           ↑
+#                           gadget_id = 0
+#
+#       gadgets[0] wird zurückgegeben.
+#
+#       /tech_gadgets/gadget/2
+#                           ↑
+#                           gadget_id = 2
+#
+#       gadgets[2] wird zurückgegeben.
 
 
 

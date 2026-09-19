@@ -1,6 +1,7 @@
 from django.shortcuts import redirect, render
 from django.http import HttpResponse, JsonResponse, HttpResponseNotFound, Http404
 from .dummy_data import gadgets
+from .dummy_data import manufacturers
 from django.utils.text import slugify
 from django.urls import reverse
 import json
@@ -69,6 +70,23 @@ class GadgetView(View):
             return JsonResponse({"response": "Das war wohl nix"})
 
 
+# Aufgabe 4 example
+
+# GET View manufacturers
+def start_manufacturer_view(request, manufacturer_id):
+             return JsonResponse(manufacturers[manufacturer_id]) 
+
+# POST View manufacturers
+def start_manufacturer_Post_view(request):
+
+    if request.method == "POST":
+
+        try:
+            data=json.loads(request.body)
+            print(f"recieved data:{data}")
+            return JsonResponse({"response": "perfekt :)"})
+        except:
+            return JsonResponse({"response": "Das war wohl nix mit dem POST"})
 
 
          
